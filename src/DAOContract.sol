@@ -20,7 +20,7 @@ contract DAOContract is Ownable {
     uint256 public votingPeriod = 3days;
 
     mapping(uint256 => Proposal) public proposals; //key id - value proposal
-    mapping(uint256=> mapping(address => bool)) public hasVoted;
+    mapping(uint256 => mapping(address => bool)) public hasVoted;
 
 
     Proposal[] public proposalsArray;
@@ -60,18 +60,18 @@ contract DAOContract is Ownable {
         emit ProposalCreated(currentId, _description, msg.sender);
     }
 
-    function vote(uint _proposalId, bool _support) external  {
+    function vote(uint _proposalId, bool _support) external {
         Proposal storage proposal = proposals[_proposalId];
 
         require(_proposalId > 0 && _proposalId <= proposalCount, "DAO: Invalid proposal id");
-        require(block.timestamp <proposal.deadline, "DAO: voting period has ended");
+        require(block.timestamp < proposal.deadline, "DAO: voting period has ended");
 
         uint voterBalance = governanceToken.balanceOf(msg.sender);
 
         require(!hasVoted[_proposalId][msg.sender], "DAO: voter has already voted on this proposal");
         require(voterBalance > 0, "DAO: insufficient voter balance");
 
-        if(_support) {
+        if (_support) {
             proposal.voteCountFor += voterBalance;
         } else {
             proposal.voteCountAgainst += voterBalance;
@@ -80,10 +80,16 @@ contract DAOContract is Ownable {
         emit Voted(_proposalId, msg.sender, _support, voterBalance);
     }
 
-    function executeProposal(uint _proposalId) external onlyOwner {
+    modifier proposalReadyToExecute(uint _proposalId) {
+        validateProposalForExecution(_proposalId);
+        _;
+    }
+
+    function validateProposalForExecution(uint _proposalId) public view {
+        require(_proposalId > 0 && _proposalId <= proposalCount, "DAO: invalid proposal ID");
+
         Proposal storage proposal = proposals[_proposalId];
 
-        require(_proposalId > 0 && _proposalId <= proposalCount, "DAO: invalid proposal ID");
         require(!proposal.executed, "DAO: proposal has already been executed");
         require(block.timestamp >= proposal.deadline, "DAO: voting period is still active");
 
@@ -92,17 +98,17 @@ contract DAOContract is Ownable {
 
         uint quorum = (totalVotes * QUORUM_PERCENTAGE) / 100;
         require(proposal.voteCountFor > quorum, "DAO: proposal did not reach quorum");
+    }
+
+    function executeProposal(uint _proposalId) external onlyOwner proposalReadyToExecute(_proposalId) {
+        Proposal storage proposal = proposals[_proposalId];
 
         proposal.executed = true;
 
         emit ProposalExecuted(_proposalId);
     }
 
-    function checkExecuteCondition() public {
-
-    }
-
-    function getProposal(uint _proposalId) view external returns(Proposal) {
+    function getProposal(uint _proposalId) view external returns (Proposal) {
         return proposals[_proposalId];
     }
 
