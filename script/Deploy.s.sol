@@ -16,7 +16,7 @@ contract Deploy is Script {
 
         DAOContract dao = new DAOContract(
             _governanceToken,
-            100 * 10**18,
+            100 * 10**6,
             10 days
         );
 
