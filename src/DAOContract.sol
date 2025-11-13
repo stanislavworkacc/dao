@@ -18,7 +18,7 @@ contract DAOContract is Ownable {
     uint256 public constant QUORUM_PERCENTAGE = 50;
     uint256 public minTokensToCreateProposal;
     uint256 public proposalCount;
-    uint256 public votingPeriod = 3days;
+    uint256 public votingPeriod = 3 days;
 
     mapping(uint256 => Proposal) public proposals; //key id - value proposal
     mapping(uint256 => mapping(address => bool)) public hasVoted;
@@ -32,7 +32,7 @@ contract DAOContract is Ownable {
     event ProposalExecuted(uint256 id);
     event Voted(uint256 id, address voter, bool suport, uint amount);
 
-    constructor(address _governanceToken, uint256 _minTokensToCreateProposal, uint256 _votingPeriod) Ownable(msg.sender) {
+    constructor(address _governanceToken, uint _minTokensToCreateProposal, uint _votingPeriod) Ownable(msg.sender) {
         require(_governanceToken != address(0), "DAO: governance token is zero address");
         require(_votingPeriod > 0, "DAO: Voting period must be greater than 0");
         governanceToken = IERC20(_governanceToken);
@@ -109,7 +109,7 @@ contract DAOContract is Ownable {
         emit ProposalExecuted(_proposalId);
     }
 
-    function getProposal(uint _proposalId) view external returns (Proposal) {
+    function getProposal(uint _proposalId) view external returns (Proposal memory) {
         return proposals[_proposalId];
     }
 

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.30;
 
-import "../src/DAOContract.sol";
+import { DAOContract } from "../src/DAOContract.sol";
 import {Script} from "../lib/forge-std/src/Script.sol";
 import {console} from "forge-std/console.sol";
 
@@ -17,7 +17,7 @@ contract Deploy is Script {
         DAOContract dao = new DAOContract(
             _governanceToken,
             100 * 10**18,
-            10days
+            10 days
         );
 
         console.log("Storage deployed to", address(dao));
