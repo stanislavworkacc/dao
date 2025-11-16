@@ -64,3 +64,12 @@ $ forge --help
 $ anvil --help
 $ cast --help
 ```
+
+ 
+### Useful commands
+forge script script/Deploy.s.sol --rpc-url $RPC_URL --broadcast --verify
+source .env
+
+forge script script/CreateProposal.s.sol --rpc-url $RPC_URL --broadcast --verify
+forge script script/Vote.s.sol --rpc-url $RPC_URL --broadcast --verify
+forge script script/ExecuteProposal.s.sol --rpc-url $RPC_URL --broadcast --verify

@@ -20,7 +20,7 @@ contract Deploy is Script {
             10 days
         );
 
-        console.log("Storage deployed to", address(dao));
+        console.log("DAO deployed to", address(dao));
         vm.stopBroadcast();
     }
 }

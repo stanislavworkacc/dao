@@ -12,7 +12,7 @@ contract CreateProposal is Script {
         vm.startBroadcast(pk);
         DAOContract dao = DAOContract(daoAddress);
 
-        dao.createProposal("Proposal to improve the votes mechanism");
+        dao.vote(1, true);
 
         vm.stopBroadcast();
     }
