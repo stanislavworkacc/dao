@@ -73,3 +73,4 @@ source .env
 forge script script/CreateProposal.s.sol --rpc-url $RPC_URL --broadcast --verify
 forge script script/Vote.s.sol --rpc-url $RPC_URL --broadcast --verify
 forge script script/ExecuteProposal.s.sol --rpc-url $RPC_URL --broadcast --verify
+check
